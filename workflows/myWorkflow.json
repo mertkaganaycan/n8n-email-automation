@@ -1,0 +1,2108 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1D_5lnKugWn7HGQnTnpvUC2L3kuOT7C7Cs-3hjflpLIc",
+          "mode": "list",
+          "cachedResultName": "Potensiyel Müşteriler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        80,
+        -32
+      ],
+      "id": "dac49542-14fc-4c16-9eff-d44af4281da2",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Status }}",
+                    "rightValue": "=Took Trial Lesson did not buy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "d88b8fc9-3dbd-45a8-acc4-7dfc634f5ea2"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "182655e4-df7b-46a8-bb92-d4ab6a757865",
+                    "leftValue": "={{ $json.Status }}",
+                    "rightValue": "Filled web form did not buy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        384,
+        0
+      ],
+      "id": "f4f08e97-7eaa-41c5-8b98-cfd458a21a80",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-Mail'] }}",
+        "subject": "İngilizce serüvenine kaldığın yerden devam et!",
+        "message": "=Merhaba {{$json[\"NAME\"]}},\n\nDeneme dersine katıldığın için teşekkür ederiz! Umarız keyif almışsındır. Şimdi İngilizce öğrenmeye kaldığın yerden devam etmenin tam zamanı.\n\n\n\nSevgiler,  \nKonuşarak Öğren Ekibi\n\n<img src=\"${N8N_HOST}/webhook-test/${N8N_WEBHOOK_ID}?email={{$json['E-Mail']}}&type=open1\" width=\"1\" height=\"1\" style=\"display:none;\" />\n\n\n<a href=\"${N8N_HOST}/webhook-test/${N8N_WEBHOOK_ID}?email={{$json['E-Mail']}}&type=click1\">Konuşarak Öğren’e Git</a>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        928,
+        -240
+      ],
+      "id": "2a1552c7-d640-44f4-b188-89799dee7233",
+      "name": "Send a message",
+      "webhookId": "REDACTED_NODE_WEBHOOK_ID",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-Mail'] }}",
+        "subject": "Ücretsiz deneme dersini hemen al!",
+        "message": "=Merhaba {{$json[\"NAME\"]}},  Formumuzu doldurduğun için teşekkürler! Şimdi ilk ücretsiz deneme dersini alarak İngilizce konuşmaya başlayabilirsin.  \nGörüşmek üzere,   Konuşarak Öğren Ekibi\n\n<img src=\"${N8N_HOST}/webhook-test/${N8N_WEBHOOK_ID}?email={{$json['E-Mail']}}&type=open1\" width=\"1\" height=\"1\" style=\"display:none;\" />\n\n<a href=\"${N8N_HOST}/webhook-test/${N8N_WEBHOOK_ID}?email={{$json['E-Mail']}}&type=click1\">Konuşarak Öğren’e Git</a>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        128
+      ],
+      "id": "87c5f1f6-41cd-41c5-9ad0-fea0586274d7",
+      "name": "Send a message1",
+      "webhookId": "REDACTED_NODE_WEBHOOK_ID",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const raw = $json[\"Email 1 Sent\"];\nconst email1Sent = String(raw ?? \"\").toLowerCase().trim() === \"true\";\n\nconst firstContactRaw = $json[\"First Contact\"];\nconst firstContact = new Date(firstContactRaw);\nconst now = new Date();\n\nlet shouldSend_1 = false;\n\nif (email1Sent == !true && !isNaN(firstContact.getTime())) {\n  const diffInMs = now.getTime() - firstContact.getTime();\n  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);\n  shouldSend_1 = diffInDays >= 2;\n}\n\nreturn {\n  json: {\n    ...$json,\n    shouldSend_1\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        0
+      ],
+      "id": "ae146fd7-2af7-4295-80f2-b1215a10728b",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const raw = $json[\"Email 1 Sent\"];\nconst email1Sent = String(raw ?? \"\").toLowerCase().trim() === \"true\";\n\nconst firstContactRaw = $json[\"First Contact\"];\nconst firstContact = new Date(firstContactRaw);\nconst now = new Date();\n\nlet shouldSend_1 = false;\n\nif (email1Sent == !true && !isNaN(firstContact.getTime())) {\n  const diffInMs = now.getTime() - firstContact.getTime();\n  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);\n  shouldSend_1 = diffInDays >= 2;\n}\n\nreturn {\n  json: {\n    ...$json,\n    shouldSend_1\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        272
+      ],
+      "id": "8a5a85af-6d7a-4c8f-98b5-65e9e2b27253",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.shouldSend_1 }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "1ed3818d-faf5-44ae-aa5c-bc54542783ab"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "dbafc8bf-e1cb-4058-8d46-b014de083ae0",
+                    "leftValue": "={{ $json.shouldSend_1 }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        608,
+        272
+      ],
+      "id": "c7fde4a2-f694-4945-95b5-861e5eb0db2f",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1D_5lnKugWn7HGQnTnpvUC2L3kuOT7C7Cs-3hjflpLIc",
+          "mode": "list",
+          "cachedResultName": "Potensiyel Müşteriler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "E-Mail": "={{ $('Get row(s) in sheet').item.json['E-Mail'] }}",
+            "Email 1 Sent Date": "={{ $json[\"Email 1 Sent Date\"] ||    new Date().toISOString().split(\"T\")[0]}}\n",
+            "Email 1 Sent": "=TRUE"
+          },
+          "matchingColumns": [
+            "E-Mail"
+          ],
+          "schema": [
+            {
+              "id": "NAME",
+              "displayName": "NAME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "E-Mail",
+              "displayName": "E-Mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Contact",
+              "displayName": "First Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent",
+              "displayName": "Email 1 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 1 Sent Date",
+              "displayName": "Email 1 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent",
+              "displayName": "Email 2 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent Date",
+              "displayName": "Email 2 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1072,
+        -256
+      ],
+      "id": "fa8cd52c-f034-4c87-acdf-3fc0b4026595",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1D_5lnKugWn7HGQnTnpvUC2L3kuOT7C7Cs-3hjflpLIc",
+          "mode": "list",
+          "cachedResultName": "Potensiyel Müşteriler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "E-Mail": "={{ $('Get row(s) in sheet').item.json['E-Mail'] }}",
+            "Email 1 Sent Date": "={{ $json[\"Email 1 Sent Date\"] ||    new Date().toISOString().split(\"T\")[0]}}\n",
+            "Email 1 Sent": "TRUE"
+          },
+          "matchingColumns": [
+            "E-Mail"
+          ],
+          "schema": [
+            {
+              "id": "NAME",
+              "displayName": "NAME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "E-Mail",
+              "displayName": "E-Mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Contact",
+              "displayName": "First Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent",
+              "displayName": "Email 1 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 1 Sent Date",
+              "displayName": "Email 1 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent",
+              "displayName": "Email 2 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent Date",
+              "displayName": "Email 2 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1136,
+        128
+      ],
+      "id": "33c5708d-dd3b-49dd-86c7-2e01db497bb5",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        -16
+      ],
+      "id": "09d172b4-6968-41a6-8c48-64e332c0c48b",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const email2Sent = $json[\"Email 2 Sent\"] === \"TRUE\";\nconst email1SentDateRaw = $json[\"Email 1 Sent Date\"];\nconst email1SentDate = new Date(email1SentDateRaw);\nconst now = new Date();\n\nlet shouldSend_2 = false;\n\nif (!email2Sent && !isNaN(email1SentDate.getTime())) {\n  const diffInMs = now.getTime() - email1SentDate.getTime();\n  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);\n  shouldSend_2 = diffInDays >= 3;\n}\n\nreturn {\n  json: {\n    ...$json,\n    shouldSend_2\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1056,
+        -64
+      ],
+      "id": "3f8fc4c3-fea7-4fec-ad94-9eebc6b3ee30",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const email2Sent = $json[\"Email 2 Sent\"] === \"TRUE\";\nconst email1SentDateRaw = $json[\"Email 1 Sent Date\"];\nconst email1SentDate = new Date(email1SentDateRaw);\nconst now = new Date();\n\nlet shouldSend_2 = false;\n\nif (!email2Sent && !isNaN(email1SentDate.getTime())) {\n  const diffInMs = now.getTime() - email1SentDate.getTime();\n  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);\n  shouldSend_2 = diffInDays >= 3;\n}\n\nreturn {\n  json: {\n    ...$json,\n    shouldSend_2\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        288
+      ],
+      "id": "7b07f1bf-8a4f-4024-8851-d160f92fdb06",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.shouldSend_2 }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "d3534120-f98c-41a2-aba8-12f58445d30e"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1200,
+        -64
+      ],
+      "id": "63b39c4f-cb19-4ab1-93bb-f3dd10de1d80",
+      "name": "Switch3"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.shouldSend_2 }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "d3534120-f98c-41a2-aba8-12f58445d30e"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1040,
+        288
+      ],
+      "id": "52efd047-7493-4c42-8a23-8f635c272027",
+      "name": "Switch4"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-Mail'] }}",
+        "subject": "İngilizce serüvenine kaldığın yerden devam et!",
+        "message": "=Merhaba {{$json[\"NAME\"]}},\n\nDeneme dersine katıldığın için teşekkür ederiz! Umarız keyif almışsındır. Şimdi İngilizce öğrenmeye kaldığın yerden devam etmenin tam zamanı.\n\n\n\nSevgiler,  \nKonuşarak Öğren Ekibi\n\n<img src=\"${N8N_HOST}/webhook-test/${N8N_WEBHOOK_ID}?email={{$json['E-Mail']}}&type=open2\" width=\"1\" height=\"1\" style=\"display:none;\" />\n\n\n<a href=\"${N8N_HOST}/webhook-test/${N8N_WEBHOOK_ID}?email={{$json['E-Mail']}}&type=click2\">Konuşarak Öğren’e Git</a>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1328,
+        -64
+      ],
+      "id": "256bfc0b-8c9b-4b13-b7ed-a11fc709b4e5",
+      "name": "Send a message2",
+      "webhookId": "REDACTED_NODE_WEBHOOK_ID",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-Mail'] }}",
+        "subject": "İngilizce serüvenine kaldığın yerden devam et!",
+        "message": "=Merhaba {{$json[\"NAME\"]}},\n\nDeneme dersine katıldığın için teşekkür ederiz! Umarız keyif almışsındır. Şimdi İngilizce öğrenmeye kaldığın yerden devam etmenin tam zamanı.\n\n\n\nSevgiler,  \nKonuşarak Öğren Ekibi\n\n<img src=\"${N8N_HOST}/webhook-test/${N8N_WEBHOOK_ID}?email={{$json['E-Mail']}}&type=open2\" width=\"1\" height=\"1\" style=\"display:none;\" />\n\n\n<a href=\"${N8N_HOST}/webhook-test/${N8N_WEBHOOK_ID}?email={{$json['E-Mail']}}&type=click2\">Konuşarak Öğren’e Git</a>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        288
+      ],
+      "id": "86b76782-6cc8-4545-a381-c94846110171",
+      "name": "Send a message3",
+      "webhookId": "REDACTED_NODE_WEBHOOK_ID",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1D_5lnKugWn7HGQnTnpvUC2L3kuOT7C7Cs-3hjflpLIc",
+          "mode": "list",
+          "cachedResultName": "Potensiyel Müşteriler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "E-Mail": "={{ $('Get row(s) in sheet').item.json['E-Mail'] }}",
+            "Email 2 Sent": "TRUE",
+            "Email 2 Sent Date": "={{ $json[\"Email 2 Sent Date\"] ||    new Date().toISOString().split(\"T\")[0]}}\n"
+          },
+          "matchingColumns": [
+            "E-Mail"
+          ],
+          "schema": [
+            {
+              "id": "NAME",
+              "displayName": "NAME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "E-Mail",
+              "displayName": "E-Mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Contact",
+              "displayName": "First Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent",
+              "displayName": "Email 1 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 1 Sent Date",
+              "displayName": "Email 1 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent",
+              "displayName": "Email 2 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent Date",
+              "displayName": "Email 2 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1472,
+        -64
+      ],
+      "id": "6939cdf3-0017-4ee1-a72a-aa520e02ba8b",
+      "name": "Update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1D_5lnKugWn7HGQnTnpvUC2L3kuOT7C7Cs-3hjflpLIc",
+          "mode": "list",
+          "cachedResultName": "Potensiyel Müşteriler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "E-Mail": "={{ $('Get row(s) in sheet').item.json['E-Mail'] }}",
+            "Email 2 Sent": "={{ $json[\"Email 2 Sent Date\"] || new Date().toISOString().split(\"T\")[0] }}",
+            "Email 2 Sent Date": "={{ $json[\"Email 2 Sent Date\"] ||    new Date().toISOString().split(\"T\")[0]}}\n"
+          },
+          "matchingColumns": [
+            "E-Mail"
+          ],
+          "schema": [
+            {
+              "id": "NAME",
+              "displayName": "NAME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "E-Mail",
+              "displayName": "E-Mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Contact",
+              "displayName": "First Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent",
+              "displayName": "Email 1 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 1 Sent Date",
+              "displayName": "Email 1 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent",
+              "displayName": "Email 2 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent Date",
+              "displayName": "Email 2 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1376,
+        288
+      ],
+      "id": "00147ea8-ac49-43a3-b578-cfd714882b1e",
+      "name": "Update row in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.shouldSend_1 }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "1ed3818d-faf5-44ae-aa5c-bc54542783ab"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b51bac28-04de-4f9d-82c3-37cdbadcf2e7",
+                    "leftValue": "={{ $json.shouldSend_1 }}",
+                    "rightValue": "is false",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        800,
+        -32
+      ],
+      "id": "d0435489-9a5b-4d8d-833c-e1fbad1d5eae",
+      "name": "Switch1",
+      "alwaysOutputData": false,
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "path": "cfa992c7-474c-49e5-9425-7a4e389d47bf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        -496
+      ],
+      "id": "b07ced77-81fb-4cb1-9c40-8c839a26fb38",
+      "name": "Email Tracking Webhook",
+      "webhookId": "REDACTED_NODE_WEBHOOK_ID"
+    },
+    {
+      "parameters": {
+        "jsCode": "const email =          $input.first().json.query.email           ;\nconst type = $input.first().json.query.type  ;\n\nreturn {\n  json: {\n    email,\n    type,\n    timestamp: new Date().toISOString().split(\"T\")[0]\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -496
+      ],
+      "id": "e967abf1-0de9-4e97-b341-0f86434d10d4",
+      "name": "webhook code"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1D_5lnKugWn7HGQnTnpvUC2L3kuOT7C7Cs-3hjflpLIc",
+          "mode": "list",
+          "cachedResultName": "Potensiyel Müşteriler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "E-Mail": "={{ $('Email Tracking Webhook').item.json.query.email }}",
+            "Email 1 Opened": "TRUE"
+          },
+          "matchingColumns": [
+            "E-Mail"
+          ],
+          "schema": [
+            {
+              "id": "NAME",
+              "displayName": "NAME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "E-Mail",
+              "displayName": "E-Mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Contact",
+              "displayName": "First Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent",
+              "displayName": "Email 1 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent Date",
+              "displayName": "Email 1 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Opened",
+              "displayName": "Email 1 Opened",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Clicked",
+              "displayName": "Email 1 Clicked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent",
+              "displayName": "Email 2 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Sent Date",
+              "displayName": "Email 2 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Opened",
+              "displayName": "Email 2 Opened",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Clicked",
+              "displayName": "Email 2 Clicked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        736,
+        -928
+      ],
+      "id": "9f4ef009-b3f6-4ef7-a941-61c672065e93",
+      "name": "Update row in sheet4",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.type }}",
+                    "rightValue": "={{ \"open1\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "2ff2bbb7-d2ad-4f91-a351-904f396a212e"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "45edc34b-f0f4-490c-9c0f-51dee2fce783",
+                    "leftValue": "={{ $json.type }}",
+                    "rightValue": "={{ \"open2\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a259670b-e3a7-48f8-9ccc-7e6e0f9b6e0f",
+                    "leftValue": "={{ $json.type }}",
+                    "rightValue": "click1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "00d92c19-5c6c-48da-b8ca-de9efa91a05a",
+                    "leftValue": "={{ $json.type }}",
+                    "rightValue": "click2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        432,
+        -560
+      ],
+      "id": "c1ce6606-41ca-4d2b-afc7-d1e95a18658c",
+      "name": "Switch5"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1D_5lnKugWn7HGQnTnpvUC2L3kuOT7C7Cs-3hjflpLIc",
+          "mode": "list",
+          "cachedResultName": "Potensiyel Müşteriler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "E-Mail": "={{ $('Email Tracking Webhook').item.json.query.email }}",
+            "Email 2 Opened": "TRUE"
+          },
+          "matchingColumns": [
+            "E-Mail"
+          ],
+          "schema": [
+            {
+              "id": "NAME",
+              "displayName": "NAME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "E-Mail",
+              "displayName": "E-Mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Contact",
+              "displayName": "First Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent",
+              "displayName": "Email 1 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent Date",
+              "displayName": "Email 1 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Opened",
+              "displayName": "Email 1 Opened",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Clicked",
+              "displayName": "Email 1 Clicked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent",
+              "displayName": "Email 2 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Sent Date",
+              "displayName": "Email 2 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Opened",
+              "displayName": "Email 2 Opened",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Clicked",
+              "displayName": "Email 2 Clicked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        720,
+        -768
+      ],
+      "id": "7e8c671f-b5eb-4be2-9bba-f666de7c5d56",
+      "name": "Update row in sheet5",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1D_5lnKugWn7HGQnTnpvUC2L3kuOT7C7Cs-3hjflpLIc",
+          "mode": "list",
+          "cachedResultName": "Potensiyel Müşteriler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "E-Mail": "={{ $('Email Tracking Webhook').item.json.query.email }}",
+            "Email 1 Clicked": "TRUE"
+          },
+          "matchingColumns": [
+            "E-Mail"
+          ],
+          "schema": [
+            {
+              "id": "NAME",
+              "displayName": "NAME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "E-Mail",
+              "displayName": "E-Mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Contact",
+              "displayName": "First Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent",
+              "displayName": "Email 1 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent Date",
+              "displayName": "Email 1 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Opened",
+              "displayName": "Email 1 Opened",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Clicked",
+              "displayName": "Email 1 Clicked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent",
+              "displayName": "Email 2 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Sent Date",
+              "displayName": "Email 2 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Opened",
+              "displayName": "Email 2 Opened",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Clicked",
+              "displayName": "Email 2 Clicked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        736,
+        -624
+      ],
+      "id": "a94f3891-6182-4439-9d6e-3645be4c8172",
+      "name": "Update row in sheet6",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1D_5lnKugWn7HGQnTnpvUC2L3kuOT7C7Cs-3hjflpLIc",
+          "mode": "list",
+          "cachedResultName": "Potensiyel Müşteriler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "E-Mail": "={{ $('Email Tracking Webhook').item.json.query.email }}",
+            "Email 2 Clicked": "TRUE"
+          },
+          "matchingColumns": [
+            "E-Mail"
+          ],
+          "schema": [
+            {
+              "id": "NAME",
+              "displayName": "NAME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "E-Mail",
+              "displayName": "E-Mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Contact",
+              "displayName": "First Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent",
+              "displayName": "Email 1 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Sent Date",
+              "displayName": "Email 1 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Opened",
+              "displayName": "Email 1 Opened",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 1 Clicked",
+              "displayName": "Email 1 Clicked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email 2 Sent",
+              "displayName": "Email 2 Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Sent Date",
+              "displayName": "Email 2 Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Opened",
+              "displayName": "Email 2 Opened",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email 2 Clicked",
+              "displayName": "Email 2 Clicked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        752,
+        -496
+      ],
+      "id": "26209597-76b6-4aa9-bbf0-f1a135eef859",
+      "name": "Update row in sheet7",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REDACTED_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        []
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Switch3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Switch4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch3": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch4": {
+      "main": [
+        [
+          {
+            "node": "Send a message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message2": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message3": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet2": {
+      "main": [
+        []
+      ]
+    },
+    "Email Tracking Webhook": {
+      "main": [
+        [
+          {
+            "node": "webhook code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "webhook code": {
+      "main": [
+        [
+          {
+            "node": "Switch5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch5": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update row in sheet5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update row in sheet7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "65b9e76a-e56d-4359-8467-ce70cf91cde5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8e14d61e4b9b026d89631f48e3181aa7c0c479b21b4bfcf845d445fcc7b0eaa1"
+  },
+  "id": "qZML7jg0qfgmLwy2",
+  "tags": []
+}
