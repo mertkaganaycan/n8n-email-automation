@@ -1,3 +1,11 @@
 .env
 *.env
 node_modules/
+
+.DS_Store
+.Rhistory
+
+.DS_Store
+.Rhistory
+.DS_Store
+.Rhistory
